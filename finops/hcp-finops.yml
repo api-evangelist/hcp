@@ -1,5 +1,6 @@
 specification: FinOps Framework
 specificationVersion: '1.0'
+schema: https://www.finops.org/framework/
 alignedWith:
   framework: FinOps Foundation Framework
   frameworkUrl: https://www.finops.org/framework/
@@ -8,10 +9,11 @@ alignedWith:
   dataSpecUrl: https://focus.finops.org/focus-specification/v1-3/
 provider: HashiCorp Cloud Platform
 providerId: hcp
-publisherName: HashiCorp Cloud Platform
-serviceCategory: API
+publisherName: HashiCorp, Inc. (an IBM company)
+serviceCategory: Cloud / Managed Infrastructure Services
 created: '2026-05-04'
-modified: '2026-05-04'
+modified: '2026-05-05'
+reconciled: true
 tags:
   - Cloud
   - Infrastructure
@@ -21,20 +23,27 @@ tags:
   - FinOps
   - Cost Management
   - FOCUS
-description: FinOps framework definition for the HashiCorp Cloud Platform API surface. Provides a FOCUS-aligned
-  mapping for cost allocation, usage measurement, and unit-economics reporting across the provider's APIs.
+description: 'FOCUS-aligned FinOps for HashiCorp Cloud Platform: pay-as-you-go per-managed-resource
+  pricing on HCP Terraform (Essentials $0.10, Standard $0.47, Premium $0.99 per resource per month;
+  hourly rates also published) plus per-product meters for Vault Secrets, Consul, Boundary, Packer,
+  and Waypoint. New-customer $500 platform credit is recognized as a FOCUS Credit line.'
+sources:
+  - https://www.hashicorp.com/en/products/terraform/pricing
+  - https://developer.hashicorp.com/terraform/cloud-docs/api-docs
 principles:
   - name: Visibility
-    description: Make API consumption costs visible to engineering, product, and finance teams in near
-      real-time.
+    description: Use the HCP billing dashboard and per-product usage views; export usage for
+      Terraform managed-resource counts and HCP cluster hours into your FOCUS billing pipeline.
   - name: Allocation
-    description: Tag every chargeable API call with the consuming team, environment, application, and
-      feature so cost can be allocated.
+    description: Allocate Terraform spend by Workspace and Project; allocate Vault / Consul /
+      Boundary spend by HCP cluster (and the application teams that mount them).
   - name: Optimization
-    description: Continuously evaluate request patterns, caching, batching, and tier selection to reduce
-      cost per useful unit of work.
+    description: Reduce managed-resource counts via state pruning and module consolidation; pick
+      the lowest HCP Terraform tier (Essentials / Standard / Premium) that meets governance needs;
+      consume the $500 new-customer credit before committing to PAYG.
   - name: Accountability
-    description: Establish budget owners and chargeback or showback flows for each consuming team.
+    description: Assign a HashiCorp account owner per HCP Organization; review managed-resource
+      growth and HCP cluster hours monthly against the run-rate.
 domains:
   - name: Understand Usage and Cost
     capabilities:
@@ -64,7 +73,7 @@ domains:
       - Onboarding Workloads
       - Intersecting Disciplines
 billingModel:
-  pricingCategory: Usage-Based
+  pricingCategory: Pay-As-You-Go + Committed Use
   billingFrequency: Monthly
   billingCurrency: USD
   chargeCategories:
@@ -76,41 +85,63 @@ billingModel:
   chargeFrequency: Recurring
 focusColumns:
   ServiceName: HashiCorp Cloud Platform
-  ServiceCategory: Developer Tools / API
+  ServiceCategory: Cloud / Managed Infrastructure Services
   ProviderName: HashiCorp Cloud Platform
-  PublisherName: HashiCorp Cloud Platform
-  InvoiceIssuerName: HashiCorp Cloud Platform
-  PricingCategory: Usage-Based
-  PricingUnit: request
+  PublisherName: HashiCorp, Inc. (an IBM company)
+  InvoiceIssuerName: HashiCorp, Inc.
+  PricingCategory: Pay-As-You-Go
+  PricingUnit: managed-resource / cluster-hour
   BillingCurrency: USD
   ChargeCategory: Usage
 meters:
+  - name: terraform_managed_resources
+    description: Count of Terraform-managed resources, billed monthly per the active HCP Terraform
+      tier (Essentials / Standard / Premium)
+    unit: resource-month
+    aggregation: max
+    dimensions:
+      - tier
+      - workspace
+      - project
+      - organization
+  - name: terraform_managed_resource_hours
+    description: Hourly metering of managed Terraform resources
+    unit: resource-hour
+    aggregation: sum
+    dimensions:
+      - tier
+      - workspace
+      - organization
+  - name: hcp_cluster_hours
+    description: Cluster-hours for HCP Vault / Consul / Boundary / Packer / Waypoint
+    unit: cluster-hour
+    aggregation: sum
+    dimensions:
+      - product
+      - tier
+      - region
+  - name: vault_secrets
+    description: HCP Vault Secrets stored / synced
+    unit: secret
+    aggregation: max
+    dimensions:
+      - cluster
+      - app
+  - name: hcp_credit_consumption
+    description: Consumption of the $500 new-customer HCP credit
+    unit: USD
+    aggregation: sum
+    dimensions:
+      - product
   - name: api_requests
-    description: Count of billable API requests
+    description: HCP API requests (allocation / abuse-monitoring meter; not directly billable)
     unit: request
     aggregation: sum
     dimensions:
       - api
       - endpoint
-      - tier
       - region
       - consumer
-  - name: data_egress
-    description: Bytes returned over the network in API responses
-    unit: GB
-    aggregation: sum
-    dimensions:
-      - api
-      - region
-      - consumer
-  - name: compute_seconds
-    description: Server-side compute consumed by the request, where applicable
-    unit: second
-    aggregation: sum
-    dimensions:
-      - api
-      - endpoint
-      - tier
 apis:
   - name: HCP Vault Secrets API
     baseURL: https://api.cloud.hashicorp.com
@@ -153,11 +184,11 @@ apis:
     serviceName: HCP Waypoint API
     serviceCategory: API
 unitEconomics:
-  - name: Cost per 1K Requests
-    metric: billed_cost / (api_requests / 1000)
+  - name: Cost per Managed Resource
+    metric: billed_cost / terraform_managed_resources
     target: TBD
-  - name: Cost per Active Consumer
-    metric: billed_cost / active_consumers
+  - name: Cost per Cluster-Hour
+    metric: billed_cost / hcp_cluster_hours
     target: TBD
 maintainers:
   - FN: Kin Lane

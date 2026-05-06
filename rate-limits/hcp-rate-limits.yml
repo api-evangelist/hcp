@@ -4,7 +4,8 @@ schema: https://raw.githubusercontent.com/api-evangelist/interface-research/main
 provider: HashiCorp Cloud Platform
 providerId: hcp
 created: '2026-05-04'
-modified: '2026-05-04'
+modified: '2026-05-05'
+reconciled: true
 tags:
   - Cloud
   - Infrastructure
@@ -14,26 +15,40 @@ tags:
   - Rate Limiting
   - Quotas
   - Throttling
-description: Machine-readable rate limit definitions for the HashiCorp Cloud Platform API surface. Captures
-  per-tier quotas, burst behavior, response signaling, and recovery semantics. Defaults are scaffold values
-  to be replaced with published provider limits.
+description: HCP enforces API rate limits per authenticated user (or per IP for unauthenticated
+  requests). The headline limit for HCP Terraform is ~30 requests/second across most endpoints.
+  Sensitive endpoints have stricter ceilings — SMS/2FA at 5 requests/minute, email-sending at
+  10–100 requests/minute (per endpoint), and certain account operations at 40 requests/hour. Limits
+  are scoped per user, so multiple tokens issued to the same user share the budget. Other HCP
+  products (Vault, Consul, Boundary, Packer, Waypoint) inherit the HCP platform throttling layer.
+sources:
+  - https://developer.hashicorp.com/terraform/cloud-docs/api-docs
 headers:
-  limit: X-RateLimit-Limit
-  remaining: X-RateLimit-Remaining
-  reset: X-RateLimit-Reset
+  limit: x-ratelimit-limit
   retryAfter: Retry-After
-  policy: RateLimit-Policy
 responseCodes:
   throttled: 429
   quotaExceeded: 429
   serviceUnavailable: 503
 limits:
-  - tier: free
-    name: Free Tier Default
-    scope: api-key
+  - tier: all
+    name: HCP Terraform — Default API rate
+    scope: user-or-ip
+    metric: requests_per_second
+    limit: 30
+    timeFrame: second
+    applies:
+      - HCP Vault Secrets API
+      - HCP Packer API
+      - HCP Consul API
+      - HCP Boundary API
+      - HCP Waypoint API
+    notes: Documented for HCP Terraform; other HCP products share the platform throttling layer.
+  - tier: all
+    name: SMS / 2FA endpoints
+    scope: user
     metric: requests_per_minute
-    limit: 10
-    burst: 20
+    limit: 5
     timeFrame: minute
     applies:
       - HCP Vault Secrets API
@@ -41,24 +56,11 @@ limits:
       - HCP Consul API
       - HCP Boundary API
       - HCP Waypoint API
-  - tier: free
-    name: Free Tier Monthly Quota
-    scope: api-key
-    metric: requests_per_month
-    limit: 1000
-    timeFrame: month
-    applies:
-      - HCP Vault Secrets API
-      - HCP Packer API
-      - HCP Consul API
-      - HCP Boundary API
-      - HCP Waypoint API
-  - tier: professional
-    name: Professional Tier Default
-    scope: api-key
+  - tier: all
+    name: Email-sending endpoints
+    scope: user
     metric: requests_per_minute
-    limit: 100
-    burst: 200
+    limit: '10–100'
     timeFrame: minute
     applies:
       - HCP Vault Secrets API
@@ -66,25 +68,13 @@ limits:
       - HCP Consul API
       - HCP Boundary API
       - HCP Waypoint API
-  - tier: professional
-    name: Professional Tier Monthly Quota
-    scope: api-key
-    metric: requests_per_month
-    limit: 100000
-    timeFrame: month
-    applies:
-      - HCP Vault Secrets API
-      - HCP Packer API
-      - HCP Consul API
-      - HCP Boundary API
-      - HCP Waypoint API
-  - tier: enterprise
-    name: Enterprise Negotiated Limit
-    scope: contract
-    metric: requests_per_minute
-    limit: 1000
-    burst: 5000
-    timeFrame: minute
+    notes: Specific endpoints fall in the 10–100/min band; verify per-endpoint.
+  - tier: all
+    name: Account operations
+    scope: user
+    metric: requests_per_hour
+    limit: 40
+    timeFrame: hour
     applies:
       - HCP Vault Secrets API
       - HCP Packer API
@@ -92,18 +82,17 @@ limits:
       - HCP Boundary API
       - HCP Waypoint API
 policies:
+  - name: Per-User Scoping
+    description: Rate limits are scoped per authenticated user, not per token — multiple tokens
+      issued to the same user share the limit budget.
   - name: Backoff Strategy
-    description: Clients should implement exponential backoff with jitter, honoring the Retry-After header
-      when present.
-  - name: Burst Handling
-    description: Short bursts above the steady-state limit are tolerated up to the documented burst ceiling
-      before throttling engages.
-  - name: Quota Reset
-    description: Monthly quotas reset at the start of each calendar month in UTC. Per-minute and per-second
-      windows reset on a sliding-window basis.
-  - name: Fair Use
-    description: Even on uncapped enterprise tiers, sustained usage that materially impacts shared infrastructure
-      may be subject to fair-use throttling.
+    description: On HTTP 429 with the JSON-API error 'You have exceeded the API's rate limit',
+      back off and retry with jitter; honor Retry-After when present.
+  - name: Sensitive Endpoint Throttling
+    description: SMS/2FA, email, and account-mutation endpoints have tighter ceilings than the
+      default 30 rps; design clients accordingly.
+  - name: Unauthenticated Requests
+    description: Unauthenticated requests are bucketed by source IP rather than user.
 maintainers:
   - FN: Kin Lane
     email: kin@apievangelist.com
