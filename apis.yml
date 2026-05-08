@@ -35,6 +35,8 @@ apis:
     properties:
       - type: Documentation
         url: https://developer.hashicorp.com/hcp/api-docs/vault-secrets
+      - type: OpenAPI
+        url: openapi/hcp-openapi.yml
   - aid: hcp:hcp-packer
     name: HCP Packer API
     description: >-
