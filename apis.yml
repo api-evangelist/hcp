@@ -106,7 +106,7 @@ common:
     url: https://developer.hashicorp.com/hcp/docs
   - type: API Documentation
     url: https://developer.hashicorp.com/hcp/api-docs
-  - type: Status
+  - type: StatusPage
     url: https://status.hashicorp.com
 maintainers:
   - FN: Kin Lane
