@@ -1,0 +1,85 @@
+naftiko: 1.0.0-alpha2
+info:
+  label: HCP Vault Secrets API — Integrations
+  description: 'HCP Vault Secrets API — Integrations. 1 operations. Lead operation: List integrations. Self-contained Naftiko
+    capability covering one Hcp business surface.'
+  tags:
+  - Hcp
+  - Integrations
+  created: '2026-05-19'
+  modified: '2026-05-19'
+binds:
+- namespace: env
+  keys:
+    HCP_API_KEY: HCP_API_KEY
+capability:
+  consumes:
+  - type: http
+    namespace: hcp-integrations
+    baseUri: https://api.cloud.hashicorp.com
+    description: HCP Vault Secrets API — Integrations business capability. Self-contained, no shared references.
+    resources:
+    - name: secrets-2023-11-28-organizations-org_id-projects-project_id-integrations
+      path: /secrets/2023-11-28/organizations/{org_id}/projects/{project_id}/integrations
+      operations:
+      - name: listintegrations
+        method: GET
+        description: List integrations
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: org_id
+          in: path
+          type: string
+          required: true
+        - name: project_id
+          in: path
+          type: string
+          required: true
+    authentication:
+      type: bearer
+      token: '{{env.HCP_API_KEY}}'
+  exposes:
+  - type: rest
+    namespace: hcp-integrations-rest
+    port: 8080
+    description: REST adapter for HCP Vault Secrets API — Integrations. One Spectral-compliant resource per consumed operation,
+      prefixed with /v1.
+    resources:
+    - path: /v1/secrets/2023-11-28/organizations/{org-id}/projects/{project-id}/integrations
+      name: secrets-2023-11-28-organizations-org-id-projects-project-id-integrations
+      description: REST surface for secrets-2023-11-28-organizations-org_id-projects-project_id-integrations.
+      operations:
+      - method: GET
+        name: listintegrations
+        description: List integrations
+        call: hcp-integrations.listintegrations
+        with:
+          org_id: rest.org_id
+          project_id: rest.project_id
+        outputParameters:
+        - type: object
+          mapping: $.
+  - type: mcp
+    namespace: hcp-integrations-mcp
+    port: 9090
+    transport: http
+    description: MCP adapter for HCP Vault Secrets API — Integrations. One tool per consumed operation, routed inline through
+      this capability's consumes block.
+    tools:
+    - name: list-integrations
+      description: List integrations
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: true
+      call: hcp-integrations.listintegrations
+      with:
+        org_id: tools.org_id
+        project_id: tools.project_id
+      outputParameters:
+      - type: object
+        mapping: $.
