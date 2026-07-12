@@ -91,6 +91,10 @@ apis:
       - type: Documentation
         url: https://developer.hashicorp.com/hcp/api-docs/waypoint
 common:
+  - type: DomainSecurity
+    url: security/hcp-domain-security.yml
+  - type: Authentication
+    url: authentication/hcp-authentication.yml
   - type: GitHubOrganization
     url: https://github.com/hashicorp
   - type: Website
@@ -103,6 +107,8 @@ common:
     url: https://developer.hashicorp.com/hcp/api-docs
   - type: StatusPage
     url: https://status.hashicorp.com
+  - url: https://www.hashicorp.com/en/blog/feed.xml
+    type: Blog
 maintainers:
   - FN: Kin Lane
     email: kin@apievangelist.com
