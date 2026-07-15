@@ -91,6 +91,8 @@ apis:
       - type: Documentation
         url: https://developer.hashicorp.com/hcp/api-docs/waypoint
 common:
+  - type: AgenticAccess
+    url: agentic-access/hcp-agentic-access.yml
   - type: DomainSecurity
     url: security/hcp-domain-security.yml
   - type: Authentication
