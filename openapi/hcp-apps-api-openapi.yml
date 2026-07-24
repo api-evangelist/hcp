@@ -1,0 +1,92 @@
+openapi: 3.1.0
+info:
+  title: HCP Vault Secrets Apps API
+  description: Minimal OpenAPI description for the HashiCorp Cloud Platform (HCP) Vault Secrets API covering applications, secrets, dynamic secrets, rotating secrets, integrations, and gateway pools. Generated from public documentation; verify before production use.
+  version: '2023-11-28'
+  contact:
+    name: HCP API Documentation
+    url: https://developer.hashicorp.com/hcp/api-docs/vault-secrets
+  x-generated-from: https://developer.hashicorp.com/hcp/api-docs/vault-secrets
+  x-generated-by: claude-crawl-2026-05-08
+servers:
+- url: https://api.cloud.hashicorp.com
+  description: HashiCorp Cloud Platform production
+security:
+- bearerAuth: []
+tags:
+- name: Apps
+  description: HCP Vault Secrets applications
+paths:
+  /secrets/2023-11-28/organizations/{org_id}/projects/{project_id}/apps:
+    get:
+      operationId: listApps
+      summary: List applications
+      tags:
+      - Apps
+      parameters:
+      - name: org_id
+        in: path
+        required: true
+        schema:
+          type: string
+      - name: project_id
+        in: path
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AppList'
+    post:
+      operationId: createApp
+      summary: Create application
+      tags:
+      - Apps
+      parameters:
+      - name: org_id
+        in: path
+        required: true
+        schema:
+          type: string
+      - name: project_id
+        in: path
+        required: true
+        schema:
+          type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/App'
+      responses:
+        '200':
+          description: Created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/App'
+components:
+  schemas:
+    AppList:
+      type: object
+      properties:
+        apps:
+          type: array
+          items:
+            $ref: '#/components/schemas/App'
+    App:
+      type: object
+      properties:
+        name:
+          type: string
+        description:
+          type: string
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer

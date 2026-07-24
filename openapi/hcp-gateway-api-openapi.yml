@@ -1,0 +1,48 @@
+openapi: 3.1.0
+info:
+  title: HCP Vault Secrets Apps Gateway API
+  description: Minimal OpenAPI description for the HashiCorp Cloud Platform (HCP) Vault Secrets API covering applications, secrets, dynamic secrets, rotating secrets, integrations, and gateway pools. Generated from public documentation; verify before production use.
+  version: '2023-11-28'
+  contact:
+    name: HCP API Documentation
+    url: https://developer.hashicorp.com/hcp/api-docs/vault-secrets
+  x-generated-from: https://developer.hashicorp.com/hcp/api-docs/vault-secrets
+  x-generated-by: claude-crawl-2026-05-08
+servers:
+- url: https://api.cloud.hashicorp.com
+  description: HashiCorp Cloud Platform production
+security:
+- bearerAuth: []
+tags:
+- name: Gateway
+  description: Gateway pools
+paths:
+  /secrets/2023-11-28/organizations/{org_id}/projects/{project_id}/gateway-pools:
+    get:
+      operationId: listGatewayPools
+      summary: List gateway pools
+      tags:
+      - Gateway
+      parameters:
+      - name: org_id
+        in: path
+        required: true
+        schema:
+          type: string
+      - name: project_id
+        in: path
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                type: object
+components:
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
