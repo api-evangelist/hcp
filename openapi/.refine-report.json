@@ -1,0 +1,22 @@
+{
+  "provider": "hcp",
+  "sources": [
+    "hcp-apps-api-openapi.yml",
+    "hcp-gateway-api-openapi.yml",
+    "hcp-integrations-api-openapi.yml",
+    "hcp-secrets-api-openapi.yml",
+    "hcp-sync-api-openapi.yml"
+  ],
+  "outputs": [
+    "hcp-apps-api-openapi.yml",
+    "hcp-gateway-api-openapi.yml",
+    "hcp-integrations-api-openapi.yml",
+    "hcp-secrets-api-openapi.yml",
+    "hcp-sync-api-openapi.yml"
+  ],
+  "archived": [],
+  "errors": [],
+  "warnings": [],
+  "notes": [],
+  "skipped": []
+}

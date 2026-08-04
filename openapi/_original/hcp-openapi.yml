@@ -1,0 +1,314 @@
+openapi: 3.1.0
+info:
+  title: HCP Vault Secrets API
+  description: >-
+    Minimal OpenAPI description for the HashiCorp Cloud Platform (HCP) Vault
+    Secrets API covering applications, secrets, dynamic secrets, rotating
+    secrets, integrations, and gateway pools. Generated from public
+    documentation; verify before production use.
+  version: "2023-11-28"
+  contact:
+    name: HCP API Documentation
+    url: https://developer.hashicorp.com/hcp/api-docs/vault-secrets
+  x-generated-from: https://developer.hashicorp.com/hcp/api-docs/vault-secrets
+  x-generated-by: claude-crawl-2026-05-08
+servers:
+  - url: https://api.cloud.hashicorp.com
+    description: HashiCorp Cloud Platform production
+security:
+  - bearerAuth: []
+tags:
+  - name: Apps
+    description: HCP Vault Secrets applications
+  - name: Secrets
+    description: Static and rotating secrets
+  - name: Integrations
+    description: External integrations
+  - name: Sync
+    description: Secret synchronization
+  - name: Gateway
+    description: Gateway pools
+paths:
+  /secrets/2023-11-28/organizations/{org_id}/projects/{project_id}/apps:
+    get:
+      operationId: listApps
+      summary: List applications
+      tags:
+        - Apps
+      parameters:
+        - name: org_id
+          in: path
+          required: true
+          schema:
+            type: string
+        - name: project_id
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AppList'
+    post:
+      operationId: createApp
+      summary: Create application
+      tags:
+        - Apps
+      parameters:
+        - name: org_id
+          in: path
+          required: true
+          schema:
+            type: string
+        - name: project_id
+          in: path
+          required: true
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/App'
+      responses:
+        '200':
+          description: Created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/App'
+  /secrets/2023-11-28/organizations/{org_id}/projects/{project_id}/apps/{app_name}/secrets:
+    get:
+      operationId: listSecrets
+      summary: List secrets
+      tags:
+        - Secrets
+      parameters:
+        - name: org_id
+          in: path
+          required: true
+          schema:
+            type: string
+        - name: project_id
+          in: path
+          required: true
+          schema:
+            type: string
+        - name: app_name
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                type: object
+  /secrets/2023-11-28/organizations/{org_id}/projects/{project_id}/apps/{app_name}/secrets/{name}:
+    get:
+      operationId: getSecret
+      summary: Get secret
+      tags:
+        - Secrets
+      parameters:
+        - name: org_id
+          in: path
+          required: true
+          schema:
+            type: string
+        - name: project_id
+          in: path
+          required: true
+          schema:
+            type: string
+        - name: app_name
+          in: path
+          required: true
+          schema:
+            type: string
+        - name: name
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Secret'
+    delete:
+      operationId: deleteSecret
+      summary: Delete secret
+      tags:
+        - Secrets
+      parameters:
+        - name: org_id
+          in: path
+          required: true
+          schema:
+            type: string
+        - name: project_id
+          in: path
+          required: true
+          schema:
+            type: string
+        - name: app_name
+          in: path
+          required: true
+          schema:
+            type: string
+        - name: name
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Deleted
+  /secrets/2023-11-28/organizations/{org_id}/projects/{project_id}/apps/{app_name}/secrets/{name}:open:
+    get:
+      operationId: openSecret
+      summary: Open (read) a secret value
+      tags:
+        - Secrets
+      parameters:
+        - name: org_id
+          in: path
+          required: true
+          schema:
+            type: string
+        - name: project_id
+          in: path
+          required: true
+          schema:
+            type: string
+        - name: app_name
+          in: path
+          required: true
+          schema:
+            type: string
+        - name: name
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                type: object
+  /secrets/2023-11-28/organizations/{org_id}/projects/{project_id}/integrations:
+    get:
+      operationId: listIntegrations
+      summary: List integrations
+      tags:
+        - Integrations
+      parameters:
+        - name: org_id
+          in: path
+          required: true
+          schema:
+            type: string
+        - name: project_id
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                type: object
+  /secrets/2023-11-28/organizations/{org_id}/projects/{project_id}/syncs:
+    get:
+      operationId: listSyncs
+      summary: List syncs
+      tags:
+        - Sync
+      parameters:
+        - name: org_id
+          in: path
+          required: true
+          schema:
+            type: string
+        - name: project_id
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                type: object
+  /secrets/2023-11-28/organizations/{org_id}/projects/{project_id}/gateway-pools:
+    get:
+      operationId: listGatewayPools
+      summary: List gateway pools
+      tags:
+        - Gateway
+      parameters:
+        - name: org_id
+          in: path
+          required: true
+          schema:
+            type: string
+        - name: project_id
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                type: object
+components:
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+  schemas:
+    App:
+      type: object
+      properties:
+        name:
+          type: string
+        description:
+          type: string
+    AppList:
+      type: object
+      properties:
+        apps:
+          type: array
+          items:
+            $ref: '#/components/schemas/App'
+    Secret:
+      type: object
+      properties:
+        name:
+          type: string
+        version:
+          type: integer
+        created_at:
+          type: string
+          format: date-time
+        type:
+          type: string
