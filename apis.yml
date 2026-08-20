@@ -40,6 +40,10 @@ apis:
   baseURL: https://api.cloud.hashicorp.com
   tags:
   - Packer
+  - Image
+  - DevOps
+  tags_raw:
+  - Packer
   - Images
   - DevOps
   properties:
@@ -93,6 +97,8 @@ apis:
   humanURL: https://developer.hashicorp.com/hcp/api-docs/vault-secrets
   baseURL: https://api.cloud.hashicorp.com
   tags:
+  - Application
+  tags_raw:
   - Apps
   properties:
   - type: OpenAPI
@@ -117,6 +123,8 @@ apis:
   humanURL: https://developer.hashicorp.com/hcp/api-docs/vault-secrets
   baseURL: https://api.cloud.hashicorp.com
   tags:
+  - Integration
+  tags_raw:
   - Integrations
   properties:
   - type: OpenAPI
