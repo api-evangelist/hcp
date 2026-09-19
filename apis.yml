@@ -123,6 +123,8 @@ apis:
   humanURL: https://developer.hashicorp.com/hcp/api-docs/vault-secrets
   baseURL: https://api.cloud.hashicorp.com
   tags:
+  - Gateways
+  tags_raw:
   - Gateway
   properties:
   - type: OpenAPI
