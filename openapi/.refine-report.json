@@ -1,11 +1,7 @@
 {
   "provider": "hcp",
   "sources": [
-    "hcp-apps-api-openapi.yml",
-    "hcp-gateway-api-openapi.yml",
-    "hcp-integrations-api-openapi.yml",
-    "hcp-secrets-api-openapi.yml",
-    "hcp-sync-api-openapi.yml"
+    "_ae-authored/hcp-openapi.yml"
   ],
   "outputs": [
     "hcp-apps-api-openapi.yml",
@@ -17,6 +13,16 @@
   "archived": [],
   "errors": [],
   "warnings": [],
-  "notes": [],
-  "skipped": []
+  "notes": [
+    "sourced from openapi/_original/ (0 archived document(s)); previously refined output at the top level was skipped rather than re-split",
+    "hcp-openapi.yml: upgraded openapi 3.1.0 -> OpenAPI 3.2.0",
+    "apis.yml register: already-registered"
+  ],
+  "skipped": [
+    "hcp-apps-api-openapi.yml: previously refined output, superseded by openapi/_original/",
+    "hcp-gateway-api-openapi.yml: previously refined output, superseded by openapi/_original/",
+    "hcp-integrations-api-openapi.yml: previously refined output, superseded by openapi/_original/",
+    "hcp-secrets-api-openapi.yml: previously refined output, superseded by openapi/_original/",
+    "hcp-sync-api-openapi.yml: previously refined output, superseded by openapi/_original/"
+  ]
 }

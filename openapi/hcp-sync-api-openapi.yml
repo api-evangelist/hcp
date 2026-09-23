@@ -1,6 +1,6 @@
-openapi: 3.1.0
+openapi: 3.2.0
 info:
-  title: HCP Vault Secrets Apps Sync API
+  title: HCP Vault Secrets Sync API
   description: Minimal OpenAPI description for the HashiCorp Cloud Platform (HCP) Vault Secrets API covering applications, secrets, dynamic secrets, rotating secrets, integrations, and gateway pools. Generated from public documentation; verify before production use.
   version: '2023-11-28'
   contact:

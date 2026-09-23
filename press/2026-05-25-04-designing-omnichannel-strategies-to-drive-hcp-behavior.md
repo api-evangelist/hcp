@@ -1,7 +1,9 @@
 ---
 title: Designing Omnichannel Strategies to Drive HCP Behavior ...
 url: https://www.viz.ai/blog/designing-omnichannel-strategies-to-drive-hcp-behavior-change
-date: '2026-05-25'
+published: ''
+date_basis: harvested
+harvested: '2026-05-25'
 query: '"HCP" press release artificial intelligence'
 position: 4
 source: serpapi-google
