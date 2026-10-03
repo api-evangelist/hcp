@@ -72,13 +72,6 @@ paths:
                 $ref: '#/components/schemas/App'
 components:
   schemas:
-    AppList:
-      type: object
-      properties:
-        apps:
-          type: array
-          items:
-            $ref: '#/components/schemas/App'
     App:
       type: object
       properties:
@@ -86,6 +79,13 @@ components:
           type: string
         description:
           type: string
+    AppList:
+      type: object
+      properties:
+        apps:
+          type: array
+          items:
+            $ref: '#/components/schemas/App'
   securitySchemes:
     bearerAuth:
       type: http
