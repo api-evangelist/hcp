@@ -170,6 +170,9 @@ apis:
   - type: Documentation
     url: https://developer.hashicorp.com/hcp/api-docs/vault-secrets
 common:
+  - type: CapabilityMap
+    url: capabilities/hcp-capability-edges.yml
+    name: HashiCorp Cloud Platform Business Capability Map
   - type: AgenticAccess
     url: agentic-access/hcp-agentic-access.yml
   - type: DomainSecurity
