@@ -189,10 +189,8 @@ apis:
 unitEconomics:
   - name: Cost per Managed Resource
     metric: billed_cost / terraform_managed_resources
-    target: TBD
   - name: Cost per Cluster-Hour
     metric: billed_cost / hcp_cluster_hours
-    target: TBD
 maintainers:
   - FN: Kin Lane
     email: kin@apievangelist.com
